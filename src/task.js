@@ -59,17 +59,12 @@ export const printTaskList = (arr) => {
     return mapTasks;
 };
 
-export const checkList = (arr) => {
-    const filterList = arr.filter((value) => value.getInCheckList === true);
+export const filterCheckList = (arr) => {
+    const filterList = arr.filter((value) => value.getInCheckList() === true);
     return filterList;
 };
 
-// export const printCheckList = (arr) => {
-//     const mapTasks = arr.map(
-//         (value) =>
-//             `ID : ${value.getId()} TITLE : ${value.getTitle()}
-//              DESCRIPTION : ${value.getDescription()} DUEDATE : ${value.getDueDate()}
-//              PRIORITY : ${value.getPriority()}`
-//     );
-//     return mapTasks;
-// };
+export const printCheckList = (arr) => {
+    const filteredList = filterCheckList(arr);
+    return printTaskList(filteredList);
+};
