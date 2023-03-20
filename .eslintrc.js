@@ -1,3 +1,6 @@
 module.exports = {
-  extends: ['wesbos'],
+    rules: {
+        'no-param-reassign': 0,
+    },
+    extends: ['wesbos'],
 };
