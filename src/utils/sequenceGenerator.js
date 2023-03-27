@@ -1,4 +1,4 @@
-export const numberGenerator = () => {
+export const idGenerator = () => {
     let lastNumber = 0;
 
     return () => {
