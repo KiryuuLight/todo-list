@@ -1,5 +1,3 @@
-/* Task factory */
-
 export const createTask = (title, description, dueDate, priority) => {
     let id = 0;
 
@@ -30,11 +28,11 @@ export const createTask = (title, description, dueDate, priority) => {
     const getInCheckList = () => inCheckList;
 
     const toString = () => `ID : ${getId()} 
-        TITLE : ${getTitle()} 
-        DESCRIPTION : ${getDescription()} 
-        DUEDATE : ${getDueDate()}
-        PRIORITY : ${getPriority()}
-        INCHECKLIST : ${getInCheckList()}
+        Title : ${getTitle()} 
+        Description : ${getDescription()} 
+        Duedate : ${getDueDate()}
+        Priority : ${getPriority()}
+        In checklist? : ${getInCheckList()}
         `;
 
     return {
