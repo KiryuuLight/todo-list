@@ -1,4 +1,4 @@
-export const createProject = (title, description) => {
+const createProject = (title, description) => {
     let id = 0;
 
     let taskList = [];
@@ -33,14 +33,14 @@ export const createProject = (title, description) => {
 
 // Methods to perform modifications of the object
 
-export const findProjectById = (array, id) =>
+const findProjectById = (array, id) =>
     array.find((project) => project.getId() === id);
 
-export const addTaskToProject = (project, instance) => {
+const addTaskToProject = (project, instance) => {
     project.getTaskList().push(instance);
 };
 
-export const removeTaskFromProject = (project, idTask) => {
+const removeTaskFromProject = (project, idTask) => {
     const projectTaskList = project
         .getTaskList()
         .filter((value) => value.getId() !== idTask);
@@ -50,7 +50,7 @@ export const removeTaskFromProject = (project, idTask) => {
     return 'Id not found';
 };
 
-export const updateTaskFromProject = (project, data) => {
+const updateTaskFromProject = (project, data) => {
     const projectListTask = project.getTaskList().map((value) => {
         if (value.getId() === data.idTask) {
             value.setTitle(data.title);
@@ -64,4 +64,12 @@ export const updateTaskFromProject = (project, data) => {
     if (projectListTask !== undefined)
         return `Task with id : ${data.idTask} was updated`;
     return 'Id not found';
+};
+
+export default {
+    createProject,
+    findProjectById,
+    addTaskToProject,
+    removeTaskFromProject,
+    updateTaskFromProject,
 };
