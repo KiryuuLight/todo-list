@@ -1,4 +1,4 @@
-export const createTask = (title, description, dueDate, priority) => {
+const createTask = (title, description, dueDate, priority) => {
     let id = 0;
 
     let inCheckList = false;
@@ -52,17 +52,21 @@ export const createTask = (title, description, dueDate, priority) => {
     };
 };
 
-export const printTaskList = (arr) => {
+const printTaskList = (arr) => {
     const mapTasks = arr.map((value) => value.toString());
     return mapTasks;
 };
 
-export const filterCheckList = (arr) => {
+const filterCheckList = (arr) => {
     const filterList = arr.filter((value) => value.getInCheckList() === true);
     return filterList;
 };
 
-export const printCheckList = (arr) => {
+const printCheckList = (arr) => {
     const filteredList = filterCheckList(arr);
     return printTaskList(filteredList);
+};
+
+export default {
+    createTask,
 };
