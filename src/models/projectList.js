@@ -1,36 +1,51 @@
-import pubsubInstance from '../utils/pubsub.js';
-
-export const projectList = () => {
+const ProjectList = (() => {
     const newProjectList = [];
 
-    const addProjectToList = (instance) => {
-        console.log(instance);
+    const getProjectList = () => newProjectList;
 
-        newProjectList.push(instance);
-
-        pubsubInstance.publish('projectAddedToList', newProjectList);
-    };
-
-    const removeProjectFromList = (id) => {
-        const index = newProjectList.findIndex((value) => value.getId() === id);
-        if (index !== -1) {
-            newProjectList.splice(index, 1);
-        }
-
-        return 'Removed';
-    };
-
-    pubsubInstance.subscribe('newProjectCreated', addProjectToList);
-    pubsubInstance.subscribe('projectDeleteRequest', removeProjectFromList);
-
-    const getProjectList = () => [
-        ...newProjectList.map(
+    const toString = () =>
+        newProjectList.map(
             (value) =>
-                `${value.getId()} ${value.getTitle()} ${value.getDescription()}`
-        ),
-    ];
+                `Id : ${value.getId()} , Title : ${value.getTitle()} , Description : ${value.getDescription()}`
+        );
 
     return {
         getProjectList,
+        toString,
     };
+})();
+
+const addProjectToList = (projectList, projectInstance) => {
+    projectList.push(projectInstance);
+};
+
+const removeProjectFromList = (projectList, idProject) => {
+    const index = projectList.findIndex((value) => value.getId() === idProject);
+    if (index !== -1) {
+        projectList.splice(index, 1);
+    }
+
+    return 'Removed';
+};
+
+const updateProjectInList = (
+    projectList,
+    idProject,
+    newTitle,
+    newDescription
+) => {
+    const project = projectList.find((value) => value.getId() === idProject);
+    if (project) {
+        project.setTitle(newTitle);
+        project.setDescription(newDescription);
+        return 'Updated';
+    }
+    return 'Project not found';
+};
+
+export default {
+    ProjectList,
+    addProjectToList,
+    removeProjectFromList,
+    updateProjectInList,
 };
