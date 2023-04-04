@@ -12,10 +12,6 @@ const listenForListCreation = (callback) => {
     pubsubInstance.subscribe('newListCreated', callback);
 };
 
-const listenForProjectAdditions = (callback) => {
-    pubsubInstance.subscribe('projectAddedToList', callback);
-};
-
 // Pubsub methods : ProjectList Class
 
 const newListCreated = () => {
@@ -175,13 +171,15 @@ const findTaskToAdd = () => {
                     projectArray,
                     idProject
                 );
-                if (project)
-                    return projectObj.addTaskToProject(project, taskInstance);
+                if (project) {
+                    projectObj.addTaskToProject(project, taskInstance);
+                    pubsubInstance.publish('taskAddedToProject', project);
+                }
             }
         );
     };
 
-    listenForProjectAdditions(handleNewTaskCreated);
+    listenForListCreation(handleNewTaskCreated);
 };
 
 const findTaskToRemove = () => {
@@ -189,9 +187,10 @@ const findTaskToRemove = () => {
         pubsubInstance.subscribe('taskDeleteRequest', (idProject, idTask) => {
             const project = projectObj.findProjectById(projectArray, idProject);
             projectObj.removeTaskFromProject(project, idTask);
+            pubsubInstance.publish('taskRemovedFromProject', project);
         });
     };
-    listenForProjectAdditions(handleTaskRemove);
+    listenForListCreation(handleTaskRemove);
 };
 
 const findTasktoUpdate = () => {
@@ -202,10 +201,11 @@ const findTasktoUpdate = () => {
                 data.idProject
             );
             projectObj.updateTaskFromProject(project, data);
+            pubsubInstance.publish('taskUpdatedFromProject', project);
         });
     };
 
-    listenForProjectAdditions(handleTaskUpdate);
+    listenForListCreation(handleTaskUpdate);
 };
 
 export default {
