@@ -3,6 +3,8 @@ const createProject = (title, description) => {
 
     let taskList = [];
 
+    let taskListCompleted = [];
+
     const getId = () => id;
 
     const setId = (newId) => (id = newId);
@@ -19,6 +21,10 @@ const createProject = (title, description) => {
 
     const setTaskList = (newList) => (taskList = newList);
 
+    const getTaskListCompleted = () => taskListCompleted;
+
+    const setTaskListCompleted = (newList) => (taskListCompleted = newList);
+
     return {
         getId,
         setId,
@@ -28,6 +34,8 @@ const createProject = (title, description) => {
         setDescription,
         getTaskList,
         setTaskList,
+        getTaskListCompleted,
+        setTaskListCompleted,
     };
 };
 
@@ -66,10 +74,20 @@ const updateTaskFromProject = (project, data) => {
     return 'Id not found';
 };
 
+const taskCompleted = (project, idTask) => {
+    const projectTaskItem = project
+        .getTaskList()
+        .find((value) => value.getId() === idTask);
+    project.getTaskListCompleted().push(projectTaskItem);
+    projectTaskItem.setInCheckList(true);
+    removeTaskFromProject(project, idTask);
+};
+
 export default {
     createProject,
     findProjectById,
     addTaskToProject,
     removeTaskFromProject,
     updateTaskFromProject,
+    taskCompleted,
 };
