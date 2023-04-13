@@ -53,11 +53,18 @@ const generateProjectItemHTML = (projectInstance) => {
           <img class="icon" src="${image.removeSvg}" alt="" srcset="">
         </div>
       </div>
+      <div class=" group-items pad-item">
+        <p>${projectInstance.getDescription()}</p>
+      </div>
       <div class="br-all group-items pad-item showBlock" id="openAddTaskForm">
         <img class="icon" src="${image.plusSvg}" alt="" srcset="">
         <p>Add New Task</p>
       </div>
+      <div id="${global.taskGroupCompletedPath}">
+        <p>Tasks Completed</p>
+      </div>
       <div id="${global.taskGroupPath}">
+        <p>Tasks</p>
       </div>
     </div>`;
     return html;
@@ -65,38 +72,46 @@ const generateProjectItemHTML = (projectInstance) => {
 
 const generateAddProjectHTML = () => {
     const html = `
-  <div class="complementary-column relative" id="block">
-      <p class="column-title">Project:</p>
-      <div class="information">
-        <input id="title" class="input" type="text" placeholder="Some cool title" required>
-        <textarea id="description" class="input" cols="30" rows="10" required placeholder="Some cool description"></textarea>
-      </div
-      <div class="btn-group">
-        <button class="btn br-all btnLeft" id="${global.closeBlock}">Close</button>
-        <button class="btn br-all btnRight" type="submit" id="addProjectBtn">Add Project</button>
-      </div>
-  </div>`;
+    <div class="complementary-column relative" id="block">
+      <form action="" class="form" id="addProjectBtn">
+          <p class="column-title">Project:</p>
+          <div class="information">
+            <input id="title" class="input" type="text" placeholder="Some cool title" required>
+            <textarea id="description" class="input" cols="30" rows="10" placeholder="Some cool description" required></textarea>
+          </div>
+          <div class="btn-group">
+            <button class="btn br-all btnLeft" id="${global.closeBlock}">Close</button>
+            <button class="btn br-all btnRight" type="submit">Add Project</button>
+          </div>
+      </form>
+    </div>`;
     return html;
 };
 
 const generateEditProjectHTML = (projectInstance) => {
     const html = `
     <div class="complementary-column relative" id="block">
-      <p class="column-title" id="idProject" data-project="${projectInstance.getId()}">Project:</p>
-      <div class="information">
-        <input class="input" type="text" id="title" value="${projectInstance.getTitle()}">
-        <textarea class="input" name="" id="description" cols="30" rows="10" value="">${projectInstance.getDescription()}</textarea>
-        <div class="input-group adjust-element group-items">
-          <p>Tasks</p>
-          <p>${projectInstance.getTaskList().length}</p>
+      <form action="" class="form" id="updateProjectBtn">
+        <p class="column-title" id="idProject" data-project="${projectInstance.getId()}">Project:</p>
+        <div class="information">
+          <input class="input" type="text" id="title" value="${projectInstance.getTitle()}" required>
+          <textarea class="input" name="" id="description" cols="30" rows="10" required>${projectInstance.getDescription()}</textarea>
+          <div class="input-group adjust-element group-items g-4">
+            <p>Completed:</p>
+            <p>${projectInstance.getTaskListCompleted().length}</p>
+          </div>
+          <div class="input-group adjust-element group-items g-4">
+            <p>Tasks:</p>
+            <p>${projectInstance.getTaskList().length}</p>
+          </div>
         </div>
-      </div>
-      <div class="btn-group">
-          <button class="btn br-all btnLeft" id="${
-              global.closeBlock
-          }">Close</button>
-          <button class="btn br-all btnRight" type="submit" id="updateProjectBtn">Update Project</button>
-      </div>
+        <div class="btn-group">
+            <button class="btn br-all btnLeft" id="${
+                global.closeBlock
+            }">Close</button>
+            <button class="btn br-all btnRight" type="submit">Update Project</button>
+        </div>
+      </form>
     </div>`;
     return html;
 };
@@ -117,7 +132,7 @@ const generateRemoveProjectHTML = (projectInstance) => {
         <button class="btn br-all btnLeft" id="${
             global.closeBlock
         }">Close</button>
-        <button class="btn br-all btnRight" type="submit" id="removeProjectBtn">Remove Project</button>
+        <button class="btn br-all btnRight remove" type="submit" id="removeProjectBtn">Remove Project</button>
     </div>
     </div>`;
     return html;
@@ -145,34 +160,50 @@ const generateTaskItemHTML = (taskInstance) => {
     return html;
 };
 
+const generateTaskCompletedItemHTML = (taskInstance) => {
+    const html = `
+    <div class="task pad-item br-gray adjust-element">
+      <div class="group-items">
+        <input type="checkbox" checked>
+        <p class="completed">${taskInstance.getTitle()}</p>
+      </div>
+      <div class="icon" data-task="${taskInstance.getId()}">
+        <img src="${image.arrowSvg}" alt="">
+      </div>
+    </div>`;
+    return html;
+};
+
 const generateAddTaskHTML = () => {
     const html = `
     <div class="complementary-column relative" id="block">
-      <p class="column-title">Task:</p>
-      <div class="information">
-        <input class="input" type="text" id="title" placeholder="Some cool task">
-        <textarea class="input" name="" id="description" cols="30" rows="10" placeholder="Some cool description"></textarea>
-        <div class="input-group adjust-element group-items">
-          <p>List</p>
-          <select class="select" name="select" id="listProjects">
-          </select>
+      <form action="" class="form" id="addTaskBtn">
+        <p class="column-title">Task:</p>
+        <div class="information">
+          <input class="input" type="text" id="title" placeholder="Some cool task" required>
+          <textarea class="input" name="" id="description" cols="30" rows="10" placeholder="Some cool description" required></textarea>
+          <div class="input-group adjust-element group-items">
+            <p>List</p>
+            <select class="select" name="select" id="listProjects">
+            </select>
+          </div>
+          <div class="input-group adjust-element group-items">
+            <p>Due date</p>
+            <input class="date" type="date" name="" id="dueDate" required>
+          </div>
+          <div class="input-group adjust-element group-items">
+            <p>Priority</p>
+            <select class="select" name="select" id="priority">
+              <option value="Normal">Normal</option>
+              <option value="Important">Important</option>
+            </select>
+          </div>
         </div>
-        <div class="input-group adjust-element group-items">
-          <p>Due date</p>
-          <input class="date" type="date" name="" id="dueDate">
+        <div class="btn-group">
+            <button class="btn br-all btnLeft" id="${global.closeBlock}">Close</button>
+            <button class="btn br-all btnRight" type="submit">Add Task</button>
         </div>
-        <div class="input-group adjust-element group-items">
-          <p>Priority</p>
-          <select class="select" name="select" id="priority">
-            <option value="Urgent">Urgent</option>
-            <option value="Important">Important</option>
-          </select>
-        </div>
-      </div>
-      <div class="btn-group">
-          <button class="btn br-all btnLeft" id="${global.closeBlock}">Close</button>
-          <button class="btn br-all btnRight" type="submit" id="addTaskBtn">Add Task</button>
-      </div>
+      </form>
     </div>`;
     return html;
 };
@@ -180,33 +211,35 @@ const generateAddTaskHTML = () => {
 const generateEditTaskHTML = (taskInstance) => {
     const html = `
     <div class="complementary-column relative" id="block">
-      <p class="column-title" id="idTask" data-task="${taskInstance.getId()}">Task:</p>
-      <div class="information">
-        <input class="input" type="text" id="title" value="${taskInstance.getTitle()}">
-        <textarea class="input" name="" id="description" cols="30" rows="10" value="">${taskInstance.getDescription()}</textarea>
-        <div class="input-group adjust-element group-items">
-            <p>List</p>
-            <select class="select" name="select" id="listProjects" disabled>
+      <form action="" class="form" id="updateTaskBtn">
+        <p class="column-title" id="idTask" data-task="${taskInstance.getId()}">Task:</p>
+        <div class="information">
+          <input class="input" type="text" id="title" value="${taskInstance.getTitle()}" required>
+          <textarea class="input" name="" id="description" cols="30" rows="10" required>${taskInstance.getDescription()}</textarea>
+          <div class="input-group adjust-element group-items">
+              <p>List</p>
+              <select class="select" name="select" id="listProjects" disabled>
+              </select>
+          </div>
+          <div class="input-group adjust-element group-items">
+            <p>Due date</p>
+            <input class="date" type="date" name="" id="dueDate" value="${taskInstance.getDueDate()}" required>
+          </div>
+          <div class="input-group adjust-element group-items">
+            <p>Priority</p>
+            <select class="select" name="select" id="priority">
+              <option value="Normal">Normal</option>
+              <option value="Important">Important</option>
             </select>
+          </div>
         </div>
-        <div class="input-group adjust-element group-items">
-          <p>Due date</p>
-          <input class="date" type="date" name="" id="dueDate" value="${taskInstance.getDueDate()}">
+        <div class="btn-group">
+            <button class="btn br-all btnLeft" id="${
+                global.closeBlock
+            }">Close</button>
+            <button class="btn br-all btnRight" type="submit">Update Task</button>
         </div>
-        <div class="input-group adjust-element group-items">
-          <p>Priority</p>
-          <select class="select" name="select" id="priority">
-            <option value="Urgent">Urgent</option>
-            <option value="Important" >Important</option>
-          </select>
-        </div>
-      </div>
-      <div class="btn-group">
-          <button class="btn br-all btnLeft" id="${
-              global.closeBlock
-          }">Close</button>
-          <button class="btn br-all btnRight" type="submit" id="updateTaskBtn">Update Task</button>
-      </div>
+      </form>
     </div>`;
     return html;
 };
@@ -230,14 +263,13 @@ const generateRemoveTaskHTML = (taskInstance) => {
         <div class="input-group adjust-element group-items">
           <p>Priority</p>
           <select class="select" name="select" id="priority" disabled>
-            <option value="Urgent">Urgent</option>
-            <option value="Important" >Important</option>
+            <option value="${taskInstance.getPriority()}">${taskInstance.getPriority()}</option>
           </select>
         </div>
       </div>
       <div class="btn-group">
-          <button class="btn br-all btnLeft" id="removeTaskBtn">Remove Task</button>
-          <button class="btn br-all btnRight" type="submit" id="">Task Completed</button>
+          <button class="btn br-all btnLeft remove" id="removeTaskBtn">Remove Task</button>
+          <button class="btn br-all btnRight complete"id="completedTaskBtn" type="submit">Task Completed</button>
       </div>
     </div>`;
     return html;
@@ -253,6 +285,7 @@ export default {
     generateRemoveProjectHTML,
     generateProjectListHTML,
     generateTaskItemHTML,
+    generateTaskCompletedItemHTML,
     generateAddTaskHTML,
     generateEditTaskHTML,
     generateRemoveTaskHTML,
