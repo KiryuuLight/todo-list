@@ -1,83 +1,94 @@
-import {
-    createProject,
-    addTask,
-    removeTask,
-    generateIdCount,
-    assignTaskId,
-} from './project';
-
-import {
-    createTask,
-    filterCheckList,
-    printTaskList,
-    printCheckList,
-} from './task.js';
+import pubsubUtils from './utils/pubsubUtils';
 
 export const testFunctionality = () => {
-    const newProject = createProject('Viaje a Perú', 'lorem ipsum dolor');
+    pubsubUtils.findProjectToAdd();
 
-    const newIdCount = generateIdCount();
+    pubsubUtils.findProjectToRemove();
 
-    // Instances of task Objects
+    pubsubUtils.findProjectToUpdate();
 
-    const task1 = createTask(
-        'Comprar leche',
-        'Ir al supermercado y comprar leche desnatada',
+    const list = pubsubUtils.newListCreated();
+
+    pubsubUtils.setupIdSubscriptions();
+
+    pubsubUtils.setupIdGeneration();
+
+    pubsubUtils.findTaskToAdd();
+
+    pubsubUtils.findTaskToRemove();
+
+    pubsubUtils.findTasktoUpdate();
+
+    const project1 = pubsubUtils.newProjectCreated(
+        'Home Renovation',
+        'Planning and renovation of living room and kitchen'
+    );
+
+    const task1 = pubsubUtils.newTaskCreated(
+        1,
+        'Buy milk',
+        'Go to the supermarket and buy skimmed milk',
         '2023-03-22',
-        'alta'
+        'Important'
     );
-    const task2 = createTask(
-        'Llamar al médico',
-        'Llamar para pedir cita con el médico de familia',
+
+    const task2 = pubsubUtils.newTaskCreated(
+        1,
+        'Call the doctor',
+        'Call to schedule an appointment with the family doctor',
         '2023-03-25',
-        'media'
+        'Normal'
     );
-    const task3 = createTask(
-        'Hacer ejercicio',
-        'Ir al gimnasio y hacer una sesión de entrenamiento',
+    const task3 = pubsubUtils.newTaskCreated(
+        1,
+        'Exercise',
+        'Go to the gym and do a training session',
         '2023-03-27',
-        'baja'
+        'Normal'
     );
-    const task4 = createTask(
-        'Enviar correo electrónico',
-        'Responder al correo electrónico del cliente',
+    const task4 = pubsubUtils.newTaskCreated(
+        1,
+        'Send email',
+        'Reply to client email',
         '2023-03-28',
-        'alta'
-    );
-    const task5 = createTask(
-        'Lavar la ropa',
-        'Lavar la ropa blanca y la ropa oscura por separado',
-        '2023-03-29',
-        'baja'
-    );
-    const task6 = createTask(
-        'Preparar cena',
-        'Cocinar la cena para la familia',
-        '2023-03-30',
-        'media'
+        'Normal'
     );
 
-    addTask(newProject, task1);
-    addTask(newProject, task2);
-    addTask(newProject, task3);
-    addTask(newProject, task4);
-    addTask(newProject, task5);
-    addTask(newProject, task6);
+    console.log(list.newProjectList);
 
-    assignTaskId(newIdCount(), task1);
-    assignTaskId(newIdCount(), task2);
-    assignTaskId(newIdCount(), task3);
-    assignTaskId(newIdCount(), task4);
-    assignTaskId(newIdCount(), task5);
-    assignTaskId(newIdCount(), task6);
+    console.log(project1.newProject.getTaskList());
 
-    console.log(printTaskList(newProject.getTaskList()));
+    pubsubUtils.removeTask(1, 3);
 
-    task2.setInCheckList(true);
-    task4.setInCheckList(true);
-    task6.setInCheckList(true);
+    console.log(project1.newProject.getTaskList());
 
-    console.log(printTaskList(newProject.getTaskList()));
+    pubsubUtils.updateProject(
+        1,
+        'Play Chaos Head',
+        'Complete Chaos Head before starting university'
+    );
 
-    console.log(printCheckList(newProject.getTaskList()));
+    console.log(task2.newTask.toString());
+
+    pubsubUtils.updateTask(
+        1,
+        2,
+        'Jane Doe',
+        "I don't know",
+        '06/24/2009',
+        'Important'
+    );
+
+    console.log(task2.newTask.toString());
+
+    const project2 = pubsubUtils.newProjectCreated(
+        'Test project2',
+        'Planning and renovation of living room and kitchen'
+    );
+
+    console.log(list.newProjectListInstance.toString());
+
+    pubsubUtils.updateProject(2, 'My personal project', 'Just that uwu');
+
+    console.log(list.newProjectListInstance.toString());
 };
