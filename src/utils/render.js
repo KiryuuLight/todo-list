@@ -60,6 +60,7 @@ const mainProject = (projectInstance) => {
     domFunctions.updateContent(global.mainPath);
     const htmlProject = components.generateProjectItemHTML(projectInstance);
     domFunctions.addElementToParent(global.mainPath, htmlProject);
+    listOfTasksCompleted(projectInstance);
     listOfTasks(projectInstance);
 };
 
@@ -72,6 +73,20 @@ const listOfTasks = (projectInstance) => {
     );
 
     domFunctions.addElementToParent(global.taskGroupPath, htmlTaskList);
+};
+
+const listOfTasksCompleted = (projectInstance) => {
+    const arr = projectInstance.getTaskListCompleted();
+
+    const htmlTaskListCompleted = generateItemsHTML(
+        arr,
+        components.generateTaskCompletedItemHTML
+    );
+
+    domFunctions.addElementToParent(
+        global.taskGroupCompletedPath,
+        htmlTaskListCompleted
+    );
 };
 
 // CRUD for Task
