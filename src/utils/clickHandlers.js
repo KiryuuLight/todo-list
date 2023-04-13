@@ -21,5 +21,6 @@ clickHandlers.set('removeProjectBtn', evt.removeProject);
 clickHandlers.set('addTaskBtn', evt.addTask);
 clickHandlers.set('updateTaskBtn', evt.updateTask);
 clickHandlers.set('removeTaskBtn', evt.removeTask);
+clickHandlers.set('completedTaskBtn', evt.completedTask);
 
 export { clickHandlers };
