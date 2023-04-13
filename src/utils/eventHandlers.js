@@ -145,6 +145,12 @@ const updateTask = () => {
     closeBlock();
 };
 
+const completedTask = () => {
+    const data = getTaskData('completed');
+    pubsubUtils.completeTask(data.idProject, data.idTask);
+    closeBlock();
+};
+
 export default {
     updateNewProjects,
     updateProjectSelection,
@@ -160,5 +166,6 @@ export default {
     addTask,
     removeTask,
     updateTask,
+    completedTask,
     closeBlock,
 };
