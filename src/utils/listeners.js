@@ -29,12 +29,12 @@ const loadBlockItemHandlers = () => {
 };
 
 const loadSubmitItemHandlers = () => {
+    const form = document.querySelectorAll('.form');
     const btnsLeft = document.querySelectorAll('.btnLeft');
     const btnsRight = document.querySelectorAll('.btnRight');
 
     btnsLeft.forEach((btnLeft) => {
         btnLeft.addEventListener('click', (e) => {
-            console.log(e.currentTarget.id);
             const clickHandler = clickHandlers.get(e.currentTarget.id);
             if (clickHandler) {
                 clickHandler();
@@ -44,7 +44,16 @@ const loadSubmitItemHandlers = () => {
 
     btnsRight.forEach((btnRight) => {
         btnRight.addEventListener('click', (e) => {
-            console.log(e.currentTarget.id);
+            const clickHandler = clickHandlers.get(e.currentTarget.id);
+            if (clickHandler) {
+                clickHandler();
+            }
+        });
+    });
+
+    form.forEach((formItem) => {
+        formItem.addEventListener('submit', (e) => {
+            e.preventDefault();
             const clickHandler = clickHandlers.get(e.currentTarget.id);
             if (clickHandler) {
                 clickHandler();
