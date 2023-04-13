@@ -118,11 +118,9 @@ const renderRemoveTaskForm = () => {
 
     pubsubInstance.subscribe('removeTask', (idTask) => {
         if (project) {
-            console.log(project);
             const task = project
                 .getTaskList()
                 .find((value) => value.getId() === idTask);
-            console.log(task);
             render.formRemoveTask(task);
             render.projectListSelected(project);
         }
