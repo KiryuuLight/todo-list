@@ -19,8 +19,6 @@ const newListCreated = () => {
 
     const newProjectList = newProjectListInstance.getProjectList();
 
-    console.log(newProjectList);
-
     pubsubInstance.publish('newListCreated', newProjectList);
 
     return {
@@ -29,27 +27,26 @@ const newListCreated = () => {
 };
 
 const findProjectToAdd = () => {
-    const handleProjectAdd = (projectListInstance) => {
+    const handleProjectAdd = (newProjectList) => {
         pubsubInstance.subscribe('newProjectCreated', (projectInstance) => {
-            projectListObj.addProjectToList(
-                projectListInstance,
-                projectInstance
-            );
-            pubsubInstance.publish('projectAddedToList', projectListInstance);
+            projectListObj.addProjectToList(newProjectList, projectInstance);
+            pubsubInstance.publish('projectAddedToList', newProjectList);
+            pubsubInstance.publish('listUpdated', newProjectList);
         });
     };
     listenForListCreation(handleProjectAdd);
 };
 
 const findProjectToRemove = () => {
-    const handleProjectRemove = (projectListInstance) => {
+    const handleProjectRemove = (newProjectList) => {
         pubsubInstance.subscribe(
             'projectDeleteRequest',
             (idProjectInstance) => {
                 projectListObj.removeProjectFromList(
-                    projectListInstance,
+                    newProjectList,
                     idProjectInstance
                 );
+                pubsubInstance.publish('listUpdated', newProjectList);
             }
         );
     };
@@ -57,16 +54,17 @@ const findProjectToRemove = () => {
 };
 
 const findProjectToUpdate = () => {
-    const handleProjectUpdate = (projectListInstance) => {
+    const handleProjectUpdate = (newProjectList) => {
         pubsubInstance.subscribe(
             'projectUpdateRequest',
             (idProjectInstance, title, description) => {
                 projectListObj.updateProjectInList(
-                    projectListInstance,
+                    newProjectList,
                     idProjectInstance,
                     title,
                     description
                 );
+                pubsubInstance.publish('listUpdated', newProjectList);
             }
         );
     };
@@ -152,27 +150,33 @@ const updateTask = (
     dueDate,
     priority
 ) => {
-    pubsubInstance.publish('taskUpdateRequest', {
+    const data = {
         idProject,
         idTask,
         title,
         description,
         dueDate,
         priority,
-    });
+    };
+    pubsubInstance.publish('taskUpdateRequest', data);
+};
+
+const completeTask = (idProject, idTask) => {
+    pubsubInstance.publish('taskCompleteRequest', idProject, idTask);
 };
 
 const findTaskToAdd = () => {
-    const handleNewTaskCreated = (projectArray) => {
+    const handleNewTaskCreated = (newProjectList) => {
         pubsubInstance.subscribe(
             'newTaskCreated',
             (idProject, taskInstance) => {
                 const project = projectObj.findProjectById(
-                    projectArray,
+                    newProjectList,
                     idProject
                 );
                 if (project) {
                     projectObj.addTaskToProject(project, taskInstance);
+                    pubsubInstance.publish('listUpdated', newProjectList);
                     pubsubInstance.publish('taskAddedToProject', project);
                 }
             }
@@ -183,29 +187,55 @@ const findTaskToAdd = () => {
 };
 
 const findTaskToRemove = () => {
-    const handleTaskRemove = (projectArray) => {
+    const handleTaskRemove = (newProjectList) => {
         pubsubInstance.subscribe('taskDeleteRequest', (idProject, idTask) => {
-            const project = projectObj.findProjectById(projectArray, idProject);
+            const project = projectObj.findProjectById(
+                newProjectList,
+                idProject
+            );
             projectObj.removeTaskFromProject(project, idTask);
             pubsubInstance.publish('taskRemovedFromProject', project);
+            pubsubInstance.publish('listUpdated', newProjectList);
         });
     };
     listenForListCreation(handleTaskRemove);
 };
 
 const findTasktoUpdate = () => {
-    const handleTaskUpdate = (projectArray) => {
+    const handleTaskUpdate = (newProjectList) => {
         pubsubInstance.subscribe('taskUpdateRequest', (data) => {
             const project = projectObj.findProjectById(
-                projectArray,
+                newProjectList,
                 data.idProject
             );
+
             projectObj.updateTaskFromProject(project, data);
             pubsubInstance.publish('taskUpdatedFromProject', project);
+            pubsubInstance.publish('listUpdated', newProjectList);
         });
     };
 
     listenForListCreation(handleTaskUpdate);
+};
+
+const findTaskCompleted = () => {
+    const handleTaskCompleted = (newProjectList) => {
+        pubsubInstance.subscribe(
+            'taskCompleteRequest',
+            (idProject, taskInstance) => {
+                const project = projectObj.findProjectById(
+                    newProjectList,
+                    idProject
+                );
+                if (project) {
+                    projectObj.taskCompleted(project, taskInstance);
+                    pubsubInstance.publish('listUpdated', newProjectList);
+                }
+            }
+        );
+    };
+
+    listenForListCreation(handleTaskCompleted);
 };
 
 export default {
@@ -219,9 +249,11 @@ export default {
     findTaskToAdd,
     findTaskToRemove,
     findTasktoUpdate,
+    findTaskCompleted,
     newProjectCreated,
     updateProject,
     removeProject,
     updateTask,
     removeTask,
+    completeTask,
 };
