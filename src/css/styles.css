@@ -112,6 +112,10 @@ textarea {
     width: 20px;
 }
 
+.completed {
+    text-decoration: line-through;
+}
+
 .number-tasks {
     padding: .5rem 1.6rem;
     border-radius: .6rem;
@@ -164,6 +168,10 @@ textarea {
     grid-template-columns: 70px 140px;
 }
 
+.g-4 {
+    gap: 4rem;
+}
+
 .relative {
     position: relative;
 }
@@ -181,9 +189,17 @@ textarea {
 .btn {
     all: unset;
     padding: 1rem 1rem;
+    font-weight: 600;
 }
 
 .btnRight {
     background-color: #FFD33C;
-    font-weight: 600;
+}
+
+.complete {
+    background-color: #3584FFAD;
+}
+
+.remove {
+    background-color: #FF3C61C7;
 }
