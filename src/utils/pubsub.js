@@ -7,16 +7,16 @@ function PubSub() {
         }
         events[eventName].push(func);
 
-        console.log(`${func.name} has subscribed to ${eventName} topic!`);
+        // console.log(`${func.name} has subscribed to ${eventName} topic!`);
     }
 
     function unsubscribe(eventName, func) {
         if (events[eventName]) {
             events[eventName] = events[eventName].filter((f) => f !== func);
 
-            console.log(
-                `${func.name} has unsubscribed from ${eventName} topic!`
-            );
+            // console.log(
+            //     `${func.name} has unsubscribed from ${eventName} topic!`
+            // );
         }
     }
 
